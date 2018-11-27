@@ -20,13 +20,37 @@
 //  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
+//
+//  Warning.swift
+//  WarningsValidator
+//
+//  Created by Jonas Rasmussen on 15/11/2018.
+//
 
-import WarningsValidatorCore
+import Foundation
 
-let validator = WarningsValidator()
+public enum WarningType {
+    case compile
+    case linker
+    case generic
+}
 
-do {
-    try validator.run()
-} catch {
-    print("Whoops! An error occurred: \(error)")
+public struct Warning: Equatable {
+    let file_name: String
+    let description: String
+    let line: String
+    let type: WarningType
+    
+    public init(file_name: String, description: String, line: String, type: WarningType) {
+        self.file_name = file_name
+        self.description = description
+        self.line = line
+        self.type = type
+    }
+    
+    public static func == (lhs: Warning, rhs: Warning) -> Bool {
+        return lhs.file_name == rhs.file_name &&
+            lhs.description == rhs.description &&
+            lhs.type == rhs.type
+    }
 }

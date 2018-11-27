@@ -1,30 +1,36 @@
 import Foundation
 import XCTest
-import Files
 import WarningsValidatorCore
 
 class WarningsValidatorTests: XCTestCase {
-    func testCreatingFile() throws {
-        // Setup a temp test folder that can be used as a sandbox
-        let fileSystem = FileSystem()
-        let tempFolder = fileSystem.temporaryFolder
-        let testFolder = try tempFolder.createSubfolderIfNeeded(
-            withName: "CommandLineToolTests"
-        )
+    func testThatToWarningsWithDifferentLineNumbersInTheSameFileAreTreatedAsEqual() {
+        let warn1 = [
+            Warning(file_name: "file_name", description: "reason", line:"1", type: .compile),
+            Warning(file_name: "file_name", description: "second reason", line:"2", type: .compile)
+        ]
         
-        // Empty the test folder to ensure a clean state
-        try testFolder.empty()
+        let warn2 = [
+            Warning(file_name: "file_name", description: "reason", line:"3", type: .compile),
+            Warning(file_name: "file_name", description: "second reason", line:"5", type: .compile)
+        ]
         
-        // Make the temp folder the current working folder
-        let fileManager = FileManager.default
-        fileManager.changeCurrentDirectoryPath(testFolder.path)
+        let result = Validator.validate(known: warn1, new: warn2)
         
-        // Create an instance of the command line tool
-        let arguments = [testFolder.path, "Hello.swift"]
-        let tool = WarningsValidator(arguments: arguments)
+        XCTAssertTrue(result.warningsAdded?.count == 0)
+    }
+    
+    func testThatToWarningsWithDifferentTypesInTheSameFileAreTreatedAsNotEqual() {
+        let warn1 = [
+            Warning(file_name: "file_name", description: "reason", line:"1", type: .compile),
+            Warning(file_name: "file_name", description: "second reason", line:"4", type: .compile)
+        ]
+        let warn2 = [
+            Warning(file_name: "file_name", description: "reason", line:"3", type: .linker),
+            Warning(file_name: "file_name", description: "second reason", line:"4", type: .compile)
+        ]
         
-        // Run the tool and assert that the file was created
-        try tool.run()
-        XCTAssertNotNil(try? testFolder.file(named: "Hello.swift"))
+        let result = Validator.validate(known: warn1, new: warn2)
+        
+        XCTAssertTrue(result.warningsAdded?.count == 1)
     }
 }

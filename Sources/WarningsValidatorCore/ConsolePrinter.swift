@@ -20,13 +20,26 @@
 //  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
+//
+//  ConsolePrinter.swift
+//  WarningsValidator
+//
+//  Created by Jonas Rasmussen on 26/11/2018.
+//
 
-import WarningsValidatorCore
+import Foundation
 
-let validator = WarningsValidator()
-
-do {
-    try validator.run()
-} catch {
-    print("Whoops! An error occurred: \(error)")
+class ConsolePrinter {
+    class func printC(_ warning: Warning) {
+        print("  - \(warning.file_name), line: \(warning.line)")
+        print("  -> \(warning.description)\n")
+    }
+    
+    class func printL(_ warning: Warning) {
+        print("  - \(warning.description)\n")
+    }
+    
+    class func printG(_ warning: Warning) {
+        print("\(warning.file_name) - \(warning.description)\n")
+    }
 }
