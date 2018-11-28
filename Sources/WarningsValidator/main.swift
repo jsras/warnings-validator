@@ -21,12 +21,12 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
+import Foundation
 import WarningsValidatorCore
 
-let validator = WarningsValidator()
-
 do {
-    try validator.run()
+    try WarningsValidator.run()
 } catch {
     print("Whoops! An error occurred: \(error)")
+    exit(1)
 }

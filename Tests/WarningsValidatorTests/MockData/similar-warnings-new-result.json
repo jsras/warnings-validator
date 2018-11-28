@@ -1,0 +1,59 @@
+{
+  "warnings": [
+    "parameter 'condition' not found in the function declaration [-Wdocumentation]"
+  ],
+  "ld_warnings": [
+    "ld: instance method 'elementForName:' in category from /Users/distiller/Library/Developer/Xcode/DerivedData/ios-ng-ardfimypzowcxafxrlwtajtwzszi/Build/Products/Debug-iphonesimulator/KissXML/libKissXML.a(DDXMLElementAdditions.o) conflicts with same method from another category",
+    "ld: meta method 'elementWithName:xmlns:' in category from /Users/distiller/Library/Developer/Xcode/DerivedData/ios-ng-ardfimypzowcxafxrlwtajtwzszi/Build/Products/Debug-iphonesimulator/KissXML/libKissXML.a(DDXMLElementAdditions.o) conflicts with same method from another category"
+  ],
+  "compile_warnings": [
+    {
+      "file_name": "TDXStreamUrlManager.m",
+      "file_path": "/Users/distiller/ios-ng/ios-ng/Classes/DataManager/TDXStreamUrlManager.m:386:26",
+      "reason": "'sendAsynchronousRequest:queue:completionHandler:' is deprecated: first deprecated in iOS 9.0 - Use [NSURLSession dataTaskWithRequest:completionHandler:] (see NSURLSession.h [-Wdeprecated-declarations]",
+      "line": "        [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {",
+      "cursor": "                                              ^"
+    },
+    {
+      "file_name": "TDXSidebarPopupInfoCell.m",
+      "file_path": "/Users/distiller/ios-ng/ios-ng/Classes/Player/Sidebar/Views/TDXSidebarPopupInfoCell.m:268:21",
+      "reason": "incompatible pointer types initializing 'TDXDecorations *' with an expression of type 'NSString * _Nullable' [-Wincompatible-pointer-types]",
+      "line": "    TDXDecorations *decorations = movie.decorations.firstObject;",
+      "cursor": "                                              ^"
+    },
+    {
+      "file_name": "TDXSidebarInfoCell.m",
+      "file_path": "/Users/distiller/ios-ng/ios-ng/Classes/Player/Sidebar/Views/TDXSidebarInfoCell.m:169:32",
+      "reason": "incompatible pointer types sending 'NSString * _Nullable' to parameter of type 'TDXDecorations *' [-Wincompatible-pointer-types]",
+      "line": "    [self configureDecorations:movie.decorations.firstObject];",
+      "cursor": "                                              ^"
+    },
+    {
+      "file_name": "TDXOfflinePlayer.m",
+      "file_path": "/Users/distiller/ios-ng/ios-ng/Classes/Download/TDXOfflinePlayer.m:32:35",
+      "reason": "'MPMoviePlayerPlaybackDidFinishNotification' is deprecated: first deprecated in iOS 9.0 - Use AVPlayerViewController in AVKit. [-Wdeprecated-declarations]",
+      "line": "    [[self rac_notifyUntilDealloc:MPMoviePlayerPlaybackDidFinishNotification] subscribeNext:^(NSNotification *notification) {",
+      "cursor": "                                              ^"
+    }
+  ],
+  "errors": [
+
+  ],
+  "compile_errors": [
+
+  ],
+  "file_missing_errors": [
+
+  ],
+  "undefined_symbols_errors": [
+
+  ],
+  "duplicate_symbols_errors": [
+
+  ],
+  "tests_failures": {
+  },
+  "tests_summary_messages": [
+
+  ]
+}

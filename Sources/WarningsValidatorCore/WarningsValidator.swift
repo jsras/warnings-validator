@@ -30,26 +30,30 @@
 import Foundation
 
 public final class WarningsValidator {
-    private let arguments: [String]
     
-    public init(arguments: [String] = CommandLine.arguments) {
-        self.arguments = arguments
+    public enum Error: Swift.Error {
+        case missingFilesArguments(String)
+        case failedToValidate(String)
+    }    
+    
+    public static func run(with arguments: [String] = CommandLine.arguments) throws {
+        try validate(with: arguments)
     }
     
-    public func run() throws {
+    private static func validate(with arguments: [String]) throws {
         guard arguments.count > 2 else {
-            throw Error.missingFileArguments
+            throw Error.missingFilesArguments("missing files to validate")
         }
         
-        let known_warnings_file =  CommandLine.arguments[1] // warnings-baseline
-        let new_warnings_file = CommandLine.arguments[2] // new-warnings-result
+        let known_warnings_file =  arguments[1] // warnings-baseline
+        let new_warnings_file = arguments[2] // new-warnings-result
         
         do {
             
             print("\nValidating \(new_warnings_file) against \(known_warnings_file) \n")
             
             guard let known_warnings = Validator.load(known_warnings_file), let new_warnings = Validator.load(new_warnings_file) else {
-                throw Error.failedToValidate
+                throw Error.failedToValidate("failed to load files")
             }
             
             let result = Validator.validate(known: known_warnings, new: new_warnings)
@@ -114,12 +118,5 @@ public final class WarningsValidator {
         } catch {
             print("validator error - no warnings was found")
         }
-    }
-}
-
-public extension WarningsValidator {
-    enum Error: Swift.Error {
-        case missingFileArguments
-        case failedToValidate
     }
 }

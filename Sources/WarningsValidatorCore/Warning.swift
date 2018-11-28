@@ -29,26 +29,19 @@
 
 import Foundation
 
-public enum WarningType {
+enum WarningType {
     case compile
     case linker
     case generic
 }
 
-public struct Warning: Equatable {
+struct Warning: Equatable {
     let file_name: String
     let description: String
     let line: String
     let type: WarningType
     
-    public init(file_name: String, description: String, line: String, type: WarningType) {
-        self.file_name = file_name
-        self.description = description
-        self.line = line
-        self.type = type
-    }
-    
-    public static func == (lhs: Warning, rhs: Warning) -> Bool {
+    static func == (lhs: Warning, rhs: Warning) -> Bool {
         return lhs.file_name == rhs.file_name &&
             lhs.description == rhs.description &&
             lhs.type == rhs.type
