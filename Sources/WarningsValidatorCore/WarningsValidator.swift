@@ -117,6 +117,7 @@ public final class WarningsValidator {
             exit(0)
         } catch {
             print("validator error - no warnings was found")
+            exit(1)
         }
     }
 }

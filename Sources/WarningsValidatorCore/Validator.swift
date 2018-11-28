@@ -65,6 +65,7 @@ class Validator {
         } catch {
             // handle error
             print("something went terribly wrong")
+            exit(1)
         }
         
         return nil
