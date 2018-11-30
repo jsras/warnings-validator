@@ -77,7 +77,7 @@ public final class WarningsValidator {
             if warningsAdded.count > 0 {
                 print("Conclusion: you have added new warnings!")
                 
-                print("\nnew warnings found: \n")
+                print("\nnew warnings found \(warningsAdded.count) \n")
                 for warn in warningsRemoved {
                     switch warn.type {
                     case .compile:
