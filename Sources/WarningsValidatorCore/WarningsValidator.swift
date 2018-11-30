@@ -60,12 +60,53 @@ public final class WarningsValidator {
             
             print("Aaaaand the results are in!")
             print("\n ----- * ###### -*- ###### * -----")
-            print("|  *  \(result.warningsAdded?.count ?? 0) new warnings found       |")
-            print("|  *  \(result.warningsRemoved?.count ?? 0) warnings removed          |")
+            
+            var warningsAddedString = "|  *  \(result.warningsAdded?.count ?? 0) new warnings found"
+            
+            if let resultCount = result.warningsAdded?.count, resultCount < 10 {
+                warningsAddedString.append("        |")
+            } else if let resultCount = result.warningsAdded?.count, resultCount > 9 && resultCount < 99{
+                warningsAddedString.append("       |")
+            } else {
+                warningsAddedString.append("      |")
+            }
+            print(warningsAddedString)
+            
+            var warningsRemovedString = "|  *  \(result.warningsRemoved?.count ?? 0) warnings removed"
+            
+            if let resultCount = result.warningsAdded?.count, resultCount < 10 {
+                warningsRemovedString.append("          |")
+            } else if let resultCount = result.warningsAdded?.count, resultCount > 9 && resultCount < 99{
+                warningsRemovedString.append("         |")
+            } else {
+                warningsRemovedString.append("        |")
+            }
+            print(warningsRemovedString)
+            
             print("|                                 |")
             print(" ----- * ###### -*- ###### * -----")
-            print("|  *  \(result.knownCount) baseline warnings        |")
-            print("|  *  \(result.newCount) warnings in your branch  |")
+            
+            var knownCountString = "|  *  \(result.knownCount) baseline warnings"
+            
+            if result.knownCount < 10 {
+                knownCountString.append("         |")
+            } else if result.knownCount > 9 && result.knownCount < 99{
+                knownCountString.append("        |")
+            } else {
+                knownCountString.append("       |")
+            }
+            print(knownCountString)
+            
+            var newCountString = "|  *  \(result.newCount) warnings in your branch"
+            
+            if result.newCount < 10 {
+                newCountString.append("   |")
+            } else if result.newCount > 9 && result.newCount < 99{
+                newCountString.append("  |")
+            } else {
+                newCountString.append(" |")
+            }
+            print(newCountString)
             print("|                                 |")
             print(" ----- * ###### -*- ###### * -----\n")
             
@@ -77,8 +118,8 @@ public final class WarningsValidator {
             if warningsAdded.count > 0 {
                 print("Conclusion: you have added new warnings!")
                 
-                print("\nnew warnings found \(warningsAdded.count) \n")
-                for warn in warningsRemoved {
+                print("\nnew warnings found \n")
+                for warn in warningsAdded {
                     switch warn.type {
                     case .compile:
                         ConsolePrinter.printC(warn)
