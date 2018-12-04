@@ -14,7 +14,9 @@ class WarningsValidatorTests: XCTestCase {
     }
     
     func testThatToWarningsWithDifferentLineNumbersInTheSameFileAreTreatedAsEqual() throws {
-        try WarningsValidator.run(with: ["/Users/jsras/development/tools/WarningsValidator/Tests/WarningsValidatorTests/MockData/similar-warnings-baseline.json", "/Users/jsras/development/tools/WarningsValidator/Tests/WarningsValidatorTests/MockData/similar-warnings-rew-result.json"])
+        let output: String = try run(with: ["-","/Baseline/warnings-baseline.json", "/Users/jsras/development/tdc/tv-film/result.json", "--verbose"])
+        
+        XCTAssert(output.contains("3 new warnings found"))
     }
     
     func testThatToWarningsWithDifferentTypesInTheSameFileAreTreatedAsNotEqual() {
@@ -33,3 +35,17 @@ class WarningsValidatorTests: XCTestCase {
     }
 }
 
+fileprivate extension WarningsValidatorTests {
+    @discardableResult func run(with arguments: [String]) throws -> String {
+        
+        var output = ""
+        
+        let printFunction: PrintFunction = { message in
+            output.append(message)
+        }
+        
+        try WarningsValidator.run(with: arguments, printFunction: printFunction)
+        
+        return output
+    }
+}

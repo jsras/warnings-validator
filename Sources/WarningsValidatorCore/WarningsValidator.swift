@@ -36,21 +36,23 @@ public final class WarningsValidator {
         case failedToValidate(String)
     }    
     
-    public static func run(with arguments: [String] = CommandLine.arguments) throws {
-        try validate(with: arguments)
+    public static func run(with arguments: [String] = CommandLine.arguments, printFunction: @escaping PrintFunction = { print($0)}) throws {
+        try validate(with: arguments, printFunction: printFunction)
     }
     
-    private static func validate(with arguments: [String]) throws {
+    private static func validate(with arguments: [String], printFunction: @escaping PrintFunction) throws {
         guard arguments.count > 2 else {
             throw Error.missingFilesArguments("missing files to validate")
         }
+        
+        let printer = makePrinter(using: printFunction, arguments: arguments)
         
         let known_warnings_file =  arguments[1] // warnings-baseline
         let new_warnings_file = arguments[2] // new-warnings-result
         
         do {
             
-            print("\nValidating \(new_warnings_file) against \(known_warnings_file) \n")
+            printer.output("\nValidating \(new_warnings_file) against \(known_warnings_file) \n")
             
             guard let known_warnings = Validator.load(known_warnings_file), let new_warnings = Validator.load(new_warnings_file) else {
                 throw Error.failedToValidate("failed to load files")
@@ -58,8 +60,8 @@ public final class WarningsValidator {
             
             let result = Validator.validate(known: known_warnings, new: new_warnings)
             
-            print("Aaaaand the results are in!")
-            print("\n ----- * ###### -*- ###### * -----")
+            printer.output("Aaaaand the results are in!")
+            printer.output("\n ----- * ###### -*- ###### * -----")
             
             var warningsAddedString = "|  *  \(result.warningsAdded?.count ?? 0) new warnings found"
             
@@ -70,7 +72,7 @@ public final class WarningsValidator {
             } else {
                 warningsAddedString.append("      |")
             }
-            print(warningsAddedString)
+            printer.output(warningsAddedString)
             
             var warningsRemovedString = "|  *  \(result.warningsRemoved?.count ?? 0) warnings removed"
             
@@ -81,10 +83,10 @@ public final class WarningsValidator {
             } else {
                 warningsRemovedString.append("        |")
             }
-            print(warningsRemovedString)
+            printer.output(warningsRemovedString)
             
-            print("|                                 |")
-            print(" ----- * ###### -*- ###### * -----")
+            printer.output("|                                 |")
+            printer.output(" ----- * ###### -*- ###### * -----")
             
             var knownCountString = "|  *  \(result.knownCount) baseline warnings"
             
@@ -95,7 +97,7 @@ public final class WarningsValidator {
             } else {
                 knownCountString.append("       |")
             }
-            print(knownCountString)
+            printer.output(knownCountString)
             
             var newCountString = "|  *  \(result.newCount) warnings in your branch"
             
@@ -106,59 +108,103 @@ public final class WarningsValidator {
             } else {
                 newCountString.append(" |")
             }
-            print(newCountString)
-            print("|                                 |")
-            print(" ----- * ###### -*- ###### * -----\n")
+            printer.output(newCountString)
+            printer.output("|                                 |")
+            printer.output(" ----- * ###### -*- ###### * -----\n")
             
             guard let warningsAdded = result.warningsAdded, let warningsRemoved = result.warningsRemoved else {
+                printer.output("something went wrong parsing the validator result")
                 print("something went wrong parsing the validator result")
-                exit(1)
+//                exit(1)
+                return
             }
             
             if warningsAdded.count > 0 {
-                print("Conclusion: you have added new warnings!")
+                printer.output("Conclusion: you have added new warnings!")
                 
-                print("\nnew warnings found \n")
+                printer.verboseOutput("\nnew warnings found \n")
                 for warn in warningsAdded {
                     switch warn.type {
                     case .compile:
-                        ConsolePrinter.printC(warn)
+                        printer.verboseOutput(ConsolePrinter.printC(warn))
                     case .linker:
-                        ConsolePrinter.printL(warn)
+                        printer.verboseOutput(ConsolePrinter.printL(warn))
                     default:
-                        ConsolePrinter.printG(warn)
+                        printer.verboseOutput(ConsolePrinter.printG(warn))
                     }
                 }
-                print("\n")
-                exit(1)
+                printer.output("\n")
             }
             
             if warningsAdded.count == 0 && warningsRemoved.count > 0 {
-                print("Conclusion: you have removed warnings! well done!")
-                print("\(warningsRemoved.count) total warnings removed!")
-                print("\n")
-                print("\nwarnings removed:\n")
+                printer.output("Conclusion: you have removed warnings! well done!")
+                printer.output("\(warningsRemoved.count) total warnings removed!")
+                printer.verboseOutput("\n")
+                printer.verboseOutput("\nwarnings removed:\n")
                 for warn in warningsRemoved {
                     switch warn.type {
                     case .compile:
-                        ConsolePrinter.printC(warn)
+                        printer.verboseOutput(ConsolePrinter.printC(warn))
                     case .linker:
-                        ConsolePrinter.printL(warn)
+                        printer.verboseOutput(ConsolePrinter.printL(warn))
                     default:
-                        ConsolePrinter.printG(warn)
+                        printer.verboseOutput(ConsolePrinter.printG(warn))
                     }
                 }
             }
             
             if warningsAdded.count == 0 && warningsRemoved.count == 0 {
-                print("Conclusion: no new warnings was found - you have kept the balance of the universe intact!")
-                print("\n")
+                printer.output("Conclusion: no new warnings was found - you have kept the balance of the universe intact!")
+                printer.output("\n")
             }
             
-            exit(0)
+//            exit(warningsAdded.count > 0 ? 1:0)
         } catch {
-            print("validator error - no warnings was found")
-            exit(1)
+            printer.output("validator error - no warnings was found")
+//            exit(1)
+        }
+    }
+    
+    private static func makePrinter(using printFunction: @escaping PrintFunction,
+                                    arguments: [String]) -> Printer {
+        let progressFunction = makeProgressPrintingFunction(using: printFunction, arguments: arguments)
+        let verboseFunction = makeVerbosePrintingFunction(using: progressFunction, arguments: arguments)
+        
+        return Printer(
+            outputFunction: printFunction,
+            progressFunction: progressFunction,
+            verboseFunction: verboseFunction
+        )
+    }
+    
+    private static func makeProgressPrintingFunction(using printFunction: @escaping PrintFunction,
+                                                     /*command: Command,*/
+                                                     arguments: [String]) -> VerbosePrintFunction {
+        
+        let shouldPrint = arguments.contains("--verbose")
+        
+        return { (messageExpression: () -> String) in
+            guard shouldPrint else {
+                return
+            }
+            
+            let message = messageExpression()
+            printFunction(message)
+        }
+    }
+    
+    private static func makeVerbosePrintingFunction(using progressFunction: @escaping VerbosePrintFunction,
+                                                    arguments: [String]) -> VerbosePrintFunction {
+        let allowVerboseOutput = arguments.contains("--verbose")
+        
+        return { (messageExpression: () -> String) in
+            guard allowVerboseOutput else {
+                return
+            }
+            
+            // Make text italic
+            let message = "\u{001B}[0;3m\(messageExpression())\u{001B}[0;23m"
+            progressFunction(message)
         }
     }
 }

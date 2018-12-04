@@ -30,16 +30,18 @@
 import Foundation
 
 class ConsolePrinter {
-    class func printC(_ warning: Warning) {
-        print("  - \(warning.file_name), line: \(warning.line)")
-        print("  -> \(warning.description)\n")
+    class func printC(_ warning: Warning) -> String {
+        var output = ("  - \(warning.file_name), line: \(warning.line)")
+        output.append("  -> \(warning.description)\n")
+        
+        return output
     }
     
-    class func printL(_ warning: Warning) {
-        print("  - \(warning.description)\n")
+    class func printL(_ warning: Warning) -> String {
+        return "  - \(warning.description)\n"
     }
     
-    class func printG(_ warning: Warning) {
-        print("\(warning.file_name) - \(warning.description)\n")
+    class func printG(_ warning: Warning) -> String {
+        return "\(warning.file_name) - \(warning.description)\n"
     }
 }
