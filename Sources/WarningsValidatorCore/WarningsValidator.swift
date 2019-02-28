@@ -61,7 +61,7 @@ public final class WarningsValidator {
             let result = Validator.validate(known: known_warnings, new: new_warnings)
             
             printer.output("Aaaaand the results are in!")
-            printer.output("\n |----- * ###### -*- ###### * -----|")
+            printer.output("\n|----- * ###### -*- ###### * -----|")
             
             var warningsAddedString = "|  *  \(result.warningsAdded?.count ?? 0) new warnings found"
             
