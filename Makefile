@@ -1,5 +1,5 @@
 PREFIX?=/usr/local
-INSTALL_NAME = warningsvalidator
+INSTALL_NAME = xcwarningsvalidator
 
 install: build install_bin
 
