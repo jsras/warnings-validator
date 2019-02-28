@@ -77,7 +77,7 @@ public final class WarningsValidator {
             var warningsRemovedString = "|  *  \(result.warningsRemoved?.count ?? 0) warnings removed"
             
             if let resultCount = result.warningsAdded?.count, resultCount < 10 {
-                warningsRemovedString.append("             |")
+                warningsRemovedString.append("            - |")
             } else if let resultCount = result.warningsAdded?.count, resultCount > 9 && resultCount < 99{
                 warningsRemovedString.append("        |")
             } else {
