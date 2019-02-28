@@ -76,9 +76,9 @@ public final class WarningsValidator {
             
             var warningsRemovedString = "|  *  \(result.warningsRemoved?.count ?? 0) warnings removed"
             
-            if let resultCount = result.warningsAdded?.count, resultCount < 10 {
-                warningsRemovedString.append("            ||")
-            } else if let resultCount = result.warningsAdded?.count, resultCount > 9 && resultCount < 99{
+            if let resultCount = result.warningsRemoved?.count, resultCount < 10 {
+                warningsRemovedString.append("            |")
+            } else if let resultCount = result.warningsRemoved?.count, resultCount > 9 && resultCount < 99{
                 warningsRemovedString.append("         |")
             } else {
                 warningsRemovedString.append("        |")
@@ -86,7 +86,7 @@ public final class WarningsValidator {
             printer.output(warningsRemovedString)
             
             printer.output("|                                 |")
-            printer.output(" |----- * ###### -*- ###### * -----|")
+            printer.output("|----- * ###### -*- ###### * -----|")
             
             var knownCountString = "|  *  \(result.knownCount) baseline warnings"
             
