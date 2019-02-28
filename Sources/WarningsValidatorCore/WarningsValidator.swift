@@ -61,7 +61,7 @@ public final class WarningsValidator {
             let result = Validator.validate(known: known_warnings, new: new_warnings)
             
             printer.output("Aaaaand the results are in!")
-            printer.output("\n ----- * ###### -*- ###### * -----")
+            printer.output("\n |----- * ###### -*- ###### * -----|")
             
             var warningsAddedString = "|  *  \(result.warningsAdded?.count ?? 0) new warnings found"
             
@@ -77,7 +77,7 @@ public final class WarningsValidator {
             var warningsRemovedString = "|  *  \(result.warningsRemoved?.count ?? 0) warnings removed"
             
             if let resultCount = result.warningsAdded?.count, resultCount < 10 {
-                warningsRemovedString.append("           |")
+                warningsRemovedString.append("            ||")
             } else if let resultCount = result.warningsAdded?.count, resultCount > 9 && resultCount < 99{
                 warningsRemovedString.append("         |")
             } else {
@@ -86,7 +86,7 @@ public final class WarningsValidator {
             printer.output(warningsRemovedString)
             
             printer.output("|                                 |")
-            printer.output(" ----- * ###### -*- ###### * -----")
+            printer.output(" |----- * ###### -*- ###### * -----|")
             
             var knownCountString = "|  *  \(result.knownCount) baseline warnings"
             
@@ -110,7 +110,7 @@ public final class WarningsValidator {
             }
             printer.output(newCountString)
             printer.output("|                                 |")
-            printer.output(" ----- * ###### -*- ###### * -----\n")
+            printer.output("| ----- * ###### -*- ###### * -----|\n")
             
             guard let warningsAdded = result.warningsAdded, let warningsRemoved = result.warningsRemoved else {
                 printer.output("something went wrong parsing the validator result")
