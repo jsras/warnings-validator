@@ -33,7 +33,6 @@ class Validator {
     
     class func load(_ file: String) -> [Warning]? {
         do {
-            print("loading file: \(file)")
             let data = try Data(contentsOf: URL(fileURLWithPath: file), options: .mappedIfSafe)
             let jsonResult = try JSONSerialization.jsonObject(with: data, options: .mutableLeaves)
             if let jsonResult = jsonResult as? Dictionary<String, AnyObject>, let compile_warnings = jsonResult["compile_warnings"] as? [Any], let ld_warnings = jsonResult["ld_warnings"] as? [Any] {
