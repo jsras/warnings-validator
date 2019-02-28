@@ -115,7 +115,7 @@ public final class WarningsValidator {
             guard let warningsAdded = result.warningsAdded, let warningsRemoved = result.warningsRemoved else {
                 printer.output("something went wrong parsing the validator result")
                 print("something went wrong parsing the validator result")
-//                exit(1)
+                exit(1)
                 return
             }
             
