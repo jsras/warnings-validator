@@ -33,6 +33,7 @@ class Validator {
     
     class func load(_ file: String) -> [Warning]? {
         do {
+            print("loading file: \(file)")
             let data = try Data(contentsOf: URL(fileURLWithPath: file), options: .mappedIfSafe)
             let jsonResult = try JSONSerialization.jsonObject(with: data, options: .mutableLeaves)
             if let jsonResult = jsonResult as? Dictionary<String, AnyObject>, let compile_warnings = jsonResult["compile_warnings"] as? [Any], let ld_warnings = jsonResult["ld_warnings"] as? [Any] {
@@ -42,11 +43,14 @@ class Validator {
                     if let warn = warning as? Dictionary<String, Any?> {
                         let filepathstring = warn["file_path"] as! String
                         let filepatharray = filepathstring.components(separatedBy: ":")
-                        let w = Warning(file_name: warn["file_name"] as! String, reason: warn["reason"] as! String, line:filepatharray[1], type: .compile)
-                        if !(parsed.contains { $0.reason == w.reason && $0.file_name == w.file_name && $0.type == w.type }) {
-                            parsed.append(w)
-                            print("adding warning with reason:\(String(describing: warn["reason"]))")
+                        if let file = warn["file_name"] as? String, let reason = warn["reason"] as? String, !file.isEmpty, !reason.isEmpty {
+                            let w = Warning(file_name: warn["file_name"] as! String, reason: warn["reason"] as! String, line:filepatharray[1], type: .compile)
+                            if !(parsed.contains { $0.reason == w.reason && $0.file_name == w.file_name && $0.type == w.type }) {
+                                parsed.append(w)
+                                print("adding warning with reason:\(w.reason)")
+                            }
                         }
+                        
                     }
                 }
                 
