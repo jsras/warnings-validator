@@ -121,7 +121,7 @@ public final class WarningsValidator {
             if warningsAdded.count > 0 {
                 printer.output("Conclusion: you have added new warnings!")
                 
-                printer.verboseOutput("\nnew warnings found \n")
+                printer.verboseOutput("\nnew warnings found:\n")
                 for warn in warningsAdded {
                     switch warn.type {
                     case .compile:
