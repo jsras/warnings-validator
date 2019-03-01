@@ -42,9 +42,10 @@ class Validator {
                     if let warn = warning as? Dictionary<String, Any?> {
                         let filepathstring = warn["file_path"] as! String
                         let filepatharray = filepathstring.components(separatedBy: ":")
-                        let w = Warning(file_name: warn["file_name"] as! String, description: warn["reason"] as! String, line:filepatharray[1], type: .compile)
-                        if !(parsed.contains { $0.description == w.description && $0.file_name == w.file_name && $0.type == w.type }) {
+                        let w = Warning(file_name: warn["file_name"] as! String, reason: warn["reason"] as! String, line:filepatharray[1], type: .compile)
+                        if !(parsed.contains { $0.reason == w.reason && $0.file_name == w.file_name && $0.type == w.type }) {
                             parsed.append(w)
+                            print("adding warning with reason:\(warn["reason"] ?? "empty reason")")
                         }
                     }
                 }
@@ -52,8 +53,8 @@ class Validator {
                 for warning in ld_warnings {
                     if let warn = warning as? String {
                         if warn != "ld: " {
-                            let w = Warning(file_name: "", description: warn, line:"0", type: .linker)
-                            if !(parsed.contains { $0.description == w.description && $0.type == w.type }) {
+                            let w = Warning(file_name: "", reason: warn, line:"0", type: .linker)
+                            if !(parsed.contains { $0.reason == w.reason && $0.type == w.type }) {
                                 parsed.append(w)
                             }
                         }

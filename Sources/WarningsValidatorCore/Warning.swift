@@ -37,7 +37,7 @@ enum WarningType {
 
 struct Warning: Equatable {
     let file_name: String
-    let description: String
+    let reason: String
     let line: String
     let type: WarningType
     
