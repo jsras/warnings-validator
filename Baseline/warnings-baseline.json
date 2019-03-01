@@ -21922,13 +21922,6 @@
             "cursor": "                                      ^"
         },
         {
-            "file_name": "TDXPlaybackRightsModel.h",
-            "file_path": "/Users/distiller/ios-ng/ios-ng/Classes/Player/Player/Controllers/TDXPlaybackRightsModel.h:72:79",
-            "reason": "cannot find protocol definition for 'SubtitlesViewModelProtocol'",
-            "line": "@interface TDXPlaybackRightsModel : NSObject <TDXPlaybackRightsModelProtocol, SubtitlesViewModelProtocol, TDXTransport>",
-            "cursor": "        ^"
-        },
-        {
             "file_name": "TDXRemindersManager.h",
             "file_path": "/Users/distiller/ios-ng/ios-ng/Classes/Utils/TDXRemindersManager.h:14:31",
             "reason": "'UILocalNotification' is deprecated: first deprecated in iOS 10.0 - Use UserNotifications Framework's UNNotificationRequest",
