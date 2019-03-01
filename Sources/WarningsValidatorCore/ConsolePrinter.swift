@@ -31,14 +31,14 @@ import Foundation
 
 class ConsolePrinter {
     class func printC(_ warning: Warning) -> String {
-        return "  - \(warning.file_name), line: \(warning.line), \(warning.description)\n"
+        return "  - \(warning.file_name), line: \(warning.line), \(warning.reason)\n"
     }
     
     class func printL(_ warning: Warning) -> String {
-        return "  - \(warning.description)\n"
+        return "  - \(warning.reason)\n"
     }
     
     class func printG(_ warning: Warning) -> String {
-        return "\(warning.file_name) - \(warning.description)\n"
+        return "\(warning.file_name) - \(warning.reason)\n"
     }
 }

@@ -43,7 +43,7 @@ struct Warning: Equatable {
     
     static func == (lhs: Warning, rhs: Warning) -> Bool {
         return lhs.file_name == rhs.file_name &&
-            lhs.description == rhs.description &&
+            lhs.reason == rhs.reason &&
             lhs.type == rhs.type
     }
 }
